@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ApiResponse, IUser } from "../types/user";
+import type { IUser } from "../types/user";
 import { useParams } from "react-router-dom";
 import { API } from "../API";
 
@@ -7,7 +7,6 @@ import {
   YMaps,
   Map,
   Placemark,
-  ZoomControl,
   FullscreenControl,
 } from "@pbe/react-yandex-maps";
 
@@ -16,7 +15,7 @@ export default function UserDetail() {
 
   const { data: user } = useQuery({
     queryFn: async () => {
-      const res = await API.get<ApiResponse<IUser>>(`/users/${userId}`);
+      const res = await API.get<IUser>(`/users/${userId}`);
       return res?.data;
     },
     queryKey: ["user", userId],
@@ -35,26 +34,26 @@ export default function UserDetail() {
                   Info about user
                 </h3>
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     Name:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[200px] font-semibold">
+                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
                     {user?.name}
                   </span>
                 </div>
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     Phone:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[200px] font-semibold">
+                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
                     {user?.phone}
                   </span>
                 </div>
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     Email:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[200px] font-semibold">
+                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
                     {user?.email}
                   </span>
                 </div>
@@ -65,26 +64,26 @@ export default function UserDetail() {
                   Info about Company
                 </h3>
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     Company name:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[200px] font-semibold">
+                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
                     {user?.company?.name}
                   </span>
                 </div>
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     Company phrase:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[350px] font-semibold">
+                  <span className="text-gray-700 text-[14px] max-w-[12.5 font-semibold">
                     {user?.company?.catchPhrase}
                   </span>
                 </div>
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     Company business:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[400px] font-semibold">
+                  <span className="text-gray-700 text-[14px] max-w-100 font-semibold">
                     {user?.company?.bs}
                   </span>
                 </div>
@@ -95,11 +94,11 @@ export default function UserDetail() {
 
               <div className="">
                 <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-[50px]">
+                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
                     address:
                   </span>
-                  <span className="text-gray-700 text-[14px] max-w-[400px] font-semibold">
-                    {user?.address?.city}, {user?.address?.street} -{" "}
+                  <span className="text-gray-700 text-[14px] max-w-100 font-semibold">
+                    {user?.address?.city || ""}, {user?.address?.street} -{" "}
                     {user?.address?.zipcode}
                   </span>
                 </div>
@@ -115,20 +114,19 @@ export default function UserDetail() {
                     className="w-full h-full"
                     state={{
                       center: [
-                        user?.address?.geo?.lat || "0",
-                        user?.address?.geo?.lng || "0",
+                        Number(user?.address?.geo?.lat || 0),
+                        Number(user?.address?.geo?.lng || 0),
                       ],
                       zoom: 2,
                     }}
                   >
                     <Placemark
                       geometry={[
-                        user?.address?.geo?.lat || "0",
-                        user?.address?.geo?.lng || "0",
+                        Number(user?.address?.geo?.lat || 0),
+                        Number(user?.address?.geo?.lng || 0),
                       ]}
                     />
                     <FullscreenControl />
-                    <ZoomControl options={{ float: "right" }} />
                   </Map>
                 </YMaps>
               </div>

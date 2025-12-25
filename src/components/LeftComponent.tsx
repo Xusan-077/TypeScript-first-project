@@ -14,7 +14,7 @@ export default function LeftComponent() {
   ];
 
   return (
-    <aside className=" bg-white max-[1150px]:hidden fixed top-[75px] left-0 h-screen w-60 z-20">
+    <aside className=" bg-white max-[1150px]:hidden fixed top-18.75 left-0 h-screen w-60 z-20">
       <aside className="">
         <div className="p-[24px_0]">
           <div className="p-[0_24px]">

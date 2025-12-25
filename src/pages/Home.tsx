@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../API";
-import type { ApiResponse, IUser } from "../types/user";
+import type { IUser } from "../types/user";
 import { useState } from "react";
 import UserItem from "../components/UserItem";
 
@@ -10,7 +10,7 @@ export default function Home() {
 
   const { data: Users, isLoading: UserIsLoading } = useQuery({
     queryFn: async () => {
-      const res = await API.get<ApiResponse<IUser[]>>("/users");
+      const res = await API.get<IUser[]>("/users");
       return res?.data;
     },
     queryKey: ["users"],
