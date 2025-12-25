@@ -1,24 +1,13 @@
 import { NavLink } from "react-router-dom";
+import { NavLinks } from "../App";
 
 export default function LeftComponent() {
-  interface INav {
-    path: string;
-    text: string;
-  }
-
-  const nav: INav[] = [
-    {
-      path: "/",
-      text: "Users",
-    },
-  ];
-
   return (
     <aside className=" bg-white max-[1150px]:hidden fixed top-18.75 left-0 h-screen w-60 z-20">
       <aside className="">
         <div className="p-[24px_0]">
-          <div className="p-[0_24px]">
-            {nav.map((item) => (
+          <nav className="p-[0_24px]">
+            {NavLinks.map((item) => (
               <NavLink
                 key={item.text}
                 to={item.path}
@@ -34,7 +23,7 @@ export default function LeftComponent() {
                 <span>{item.text}</span>
               </NavLink>
             ))}
-          </div>
+          </nav>
         </div>
       </aside>
     </aside>
