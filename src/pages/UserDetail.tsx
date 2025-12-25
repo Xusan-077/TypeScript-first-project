@@ -13,7 +13,11 @@ import {
 export default function UserDetail() {
   const { userId } = useParams();
 
-  const { data: user } = useQuery({
+  const {
+    data: user,
+    isLoading: UserIsLoading,
+    error: userError,
+  } = useQuery({
     queryFn: async () => {
       const res = await API.get<IUser>(`/users/${userId}`);
       return res?.data;
@@ -27,111 +31,122 @@ export default function UserDetail() {
         <div className="">
           <h2 className="text-black text-[32px] font-bold mb-6">User Detail</h2>
 
-          <div className="grid grid-cols-2 gap-6">
-            <div className="">
-              <div className="bg-white p-6.25 rounded-lg mb-6">
-                <h3 className=" text-[22px] font-semibold mb-5">
-                  Info about user
-                </h3>
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    Name:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
-                    {user?.name}
-                  </span>
-                </div>
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    Phone:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
-                    {user?.phone}
-                  </span>
-                </div>
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    Email:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
-                    {user?.email}
-                  </span>
-                </div>
-              </div>
-
-              <div className="bg-white p-6.25 rounded-lg">
-                <h3 className=" text-[22px] font-semibold mb-5">
-                  Info about Company
-                </h3>
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    Company name:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
-                    {user?.company?.name}
-                  </span>
-                </div>
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    Company phrase:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-[12.5 font-semibold">
-                    {user?.company?.catchPhrase}
-                  </span>
-                </div>
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    Company business:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-100 font-semibold">
-                    {user?.company?.bs}
-                  </span>
-                </div>
-              </div>
+          {UserIsLoading && (
+            <div className="fixed w-full top-0 left-0 h-screen flex justify-center z-1000000000000 items-center bg-[#0003]">
+              <span className="loader"></span>
             </div>
-            <div className="bg-white p-6.25 rounded-lg">
-              <h3 className=" text-[22px] font-semibold mb-5">Address</h3>
-
+          )}
+          {userError ? (
+            <p className="text-center col-span-4 text-[40px] text-red-500 mt-50">
+              User not found
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 gap-6">
               <div className="">
-                <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
-                  <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
-                    address:
-                  </span>
-                  <span className="text-gray-700 text-[14px] max-w-100 font-semibold">
-                    {user?.address?.city || ""}, {user?.address?.street} -{" "}
-                    {user?.address?.zipcode}
-                  </span>
+                <div className="bg-white p-6.25 rounded-lg mb-6">
+                  <h3 className=" text-[22px] font-semibold mb-5">
+                    Info about user
+                  </h3>
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      Name:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
+                      {user?.name}
+                    </span>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      Phone:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
+                      {user?.phone}
+                    </span>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      Email:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
+                      {user?.email}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6.25 rounded-lg">
+                  <h3 className=" text-[22px] font-semibold mb-5">
+                    Info about Company
+                  </h3>
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      Company name:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-50 font-semibold">
+                      {user?.company?.name}
+                    </span>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      Company phrase:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-[12.5 font-semibold">
+                      {user?.company?.catchPhrase}
+                    </span>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      Company business:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-100 font-semibold">
+                      {user?.company?.bs}
+                    </span>
+                  </div>
                 </div>
               </div>
+              <div className="bg-white p-6.25 rounded-lg">
+                <h3 className=" text-[22px] font-semibold mb-5">Address</h3>
 
-              <div className="w-full h-full mt-5 max-h-100">
-                <YMaps
-                  query={{
-                    apikey: "bc32072f-a50d-4f7e-b22c-a4b70bba1202",
-                  }}
-                >
-                  <Map
-                    className="w-full h-full"
-                    state={{
-                      center: [
-                        Number(user?.address?.geo?.lat || 0),
-                        Number(user?.address?.geo?.lng || 0),
-                      ],
-                      zoom: 2,
+                <div className="">
+                  <div className="bg-gray-100 rounded-lg mb-3 py-3 px-5 transition-all duration-300 flex items-center gap-2">
+                    <span className="text-gray-700 text-[14px] font-medium min-w-12.5">
+                      address:
+                    </span>
+                    <span className="text-gray-700 text-[14px] max-w-100 font-semibold">
+                      {user?.address?.city || ""}, {user?.address?.street} -{" "}
+                      {user?.address?.zipcode}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-full h-full mt-5 max-h-100">
+                  <YMaps
+                    query={{
+                      apikey: "bc32072f-a50d-4f7e-b22c-a4b70bba1202",
                     }}
                   >
-                    <Placemark
-                      geometry={[
-                        Number(user?.address?.geo?.lat || 0),
-                        Number(user?.address?.geo?.lng || 0),
-                      ]}
-                    />
-                    <FullscreenControl />
-                  </Map>
-                </YMaps>
+                    <Map
+                      className="w-full h-full"
+                      state={{
+                        center: [
+                          Number(user?.address?.geo?.lat || 0),
+                          Number(user?.address?.geo?.lng || 0),
+                        ],
+                        zoom: 2,
+                      }}
+                    >
+                      <Placemark
+                        geometry={[
+                          Number(user?.address?.geo?.lat || 0),
+                          Number(user?.address?.geo?.lng || 0),
+                        ]}
+                      />
+                      <FullscreenControl />
+                    </Map>
+                  </YMaps>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

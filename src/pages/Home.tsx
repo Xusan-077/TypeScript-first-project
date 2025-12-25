@@ -8,7 +8,11 @@ export default function Home() {
   const [search, setSearch] = useState<string>("");
   const [sort, setSort] = useState<string>("default");
 
-  const { data: Users, isLoading: UserIsLoading } = useQuery({
+  const {
+    data: Users,
+    isLoading: UserIsLoading,
+    error: UserError,
+  } = useQuery({
     queryFn: async () => {
       const res = await API.get<IUser[]>("/users");
       return res?.data;
@@ -73,31 +77,37 @@ export default function Home() {
           </div>
         </div>
 
-        <ul className="grid grid-cols-4 gap-6">
-          {search && Sorted?.length === 0 && (
-            <p className="text-center col-span-4 text-[40px] text-red-500 mt-50">
-              No users found.
-            </p>
-          )}
-          {UserIsLoading &&
-            Array.from({ length: 10 }).map((_, index) => (
-              <li key={index} className="bg-white p-[0_0_16px_0] rounded-2xl">
-                <div className="bg-gray-200 rounded-t-2xl flex items-center justify-center w-full h-50 mb-3">
-                  <i className="text-[150px] text-gray-300 bi bi-person"></i>
-                </div>
-                <div className="flex items-center flex-col text-center">
-                  <div className="h-5 bg-gray-200 rounded w-1/2 mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/3 mb-5"></div>
-                  <button className="border-[#979797] rounded-lg border p-[5px_25px] cursor-pointer text-[#979797]">
-                    View Profile
-                  </button>
-                </div>
-              </li>
+        {UserError ? (
+          <p className="text-center col-span-4 text-[40px] text-red-500 mt-50">
+            Users not found
+          </p>
+        ) : (
+          <ul className="grid grid-cols-4 gap-6">
+            {search && Sorted?.length === 0 && (
+              <p className="text-center col-span-4 text-[40px] text-red-500 mt-50">
+                No users found.
+              </p>
+            )}
+            {UserIsLoading &&
+              Array.from({ length: 10 }).map((_, index) => (
+                <li key={index} className="bg-white p-[0_0_16px_0] rounded-2xl">
+                  <div className="bg-gray-200 rounded-t-2xl flex items-center justify-center w-full h-50 mb-3">
+                    <i className="text-[150px] text-gray-300 bi bi-person"></i>
+                  </div>
+                  <div className="flex items-center flex-col text-center">
+                    <div className="h-5 bg-gray-200 rounded w-1/2 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/3 mb-5"></div>
+                    <button className="border-[#979797] rounded-lg border p-[5px_25px] cursor-pointer text-[#979797]">
+                      View Profile
+                    </button>
+                  </div>
+                </li>
+              ))}
+            {Sorted?.map((user: IUser) => (
+              <UserItem key={user.id} {...user} />
             ))}
-          {Sorted?.map((user: IUser) => (
-            <UserItem key={user.id} {...user} />
-          ))}
-        </ul>
+          </ul>
+        )}
       </div>
     </section>
   );
